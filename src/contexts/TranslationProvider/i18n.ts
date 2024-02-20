@@ -55,8 +55,8 @@ export const i18n: Record<string, { [key in (typeof OTHER_LANGUAGES)[number]]?: 
     id: `Baru disini?`,
     ru: `Новичок?`,
   },
-  [`Welcome to DeFi! Create a crypto wallet to get started!`]: {
-    zh: `欢迎来到 DeFi！创建一个加密钱包吧！`,
+  [`Welcome to SolanaFM! Create a crypto wallet to get started!`]: {
+    zh: `欢迎来到 SolanaFM！创建一个加密钱包吧！`,
     vi: `Chào mừng đến với DeFi! Tạo ví crypto để bắt đầu!`,
     fr: `Bienvenue dans DeFi! Créez un portefeuille crypto pour commencer!`,
     ja: `DeFiへようこそ！暗号ウォレットを作成して始めましょう！`,
@@ -120,6 +120,14 @@ export const i18n: Record<string, { [key in (typeof OTHER_LANGUAGES)[number]]?: 
     ru: `Установленные кошельки`,
   },
   [`Popular wallets`]: {
+    zh: `热门钱包`,
+    vi: `Ví phổ biến`,
+    fr: `Portefeuilles populaires`,
+    ja: `人気のウォレット`,
+    id: `Dompet populer`,
+    ru: `Популярные кошельки`,
+  },
+  [`Recommended wallets`]: {
     zh: `热门钱包`,
     vi: `Ví phổ biến`,
     fr: `Portefeuilles populaires`,

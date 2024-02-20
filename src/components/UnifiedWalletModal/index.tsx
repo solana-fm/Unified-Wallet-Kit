@@ -44,6 +44,11 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     dark: [],
     jupiter: [],
   },
+  buttonText: {
+    light: [tw`text-gray-800`],
+    dark: [tw`text-white/80`],
+    jupiter: [tw`text-white/80`]
+  }
 };
 
 const Header: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -70,6 +75,7 @@ const Header: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
 const ListOfWallets: React.FC<{
   list: {
+    recommendedWallets: Adapter[];
     highlightedBy: HIGHLIGHTED_BY;
     highlight: Adapter[];
     others: Adapter[];
@@ -144,7 +150,38 @@ const ListOfWallets: React.FC<{
   return (
     <>
       <div className="hideScrollbar" css={[tw`h-full overflow-y-auto pt-3 pb-8 px-5 relative`, isOpen && tw`mb-7`]}>
+        <span tw="mt-6 text-xs font-semibold">{t(`Recommended wallets`)}</span>
+        <div tw="mt-4 flex flex-col lg:flex-row lg:space-x-2 space-y-2 lg:space-y-0 mb-5">
+          {list.recommendedWallets.map((adapter, idx) => {
+            const attachment = walletAttachments ? walletAttachments[adapter.name]?.attachment : null;
+            const adapterName = (() => {
+              if (adapter.name === SolanaMobileWalletAdapterWalletName) return t(`Mobile`);
+              return adapter.name;
+            })();
+
+            return (
+              <div
+                key={idx}
+                onClick={(event) => onClickWallet(event, adapter)}
+                css={[
+                  tw`py-4 px-4 lg:px-2 border border-white/10 rounded-lg flex lg:flex-col items-center lg:justify-center cursor-pointer flex-1 w-full`,
+                  tw`hover:backdrop-blur-xl transition-all`,
+                  styles.walletItem[theme],
+                ]}
+              >
+                {isMobile() ? (
+                  <WalletIcon wallet={adapter} width={24} height={24} />
+                ) : (
+                  <WalletIcon wallet={adapter} width={30} height={30} />
+                )}
+                <span tw="font-semibold text-xs ml-4 lg:ml-0 lg:mt-3">{adapterName}</span>
+                {attachment ? <div>{attachment}</div> : null}
+              </div>
+            );
+          })}
+        </div>
         <span tw="mt-6 text-xs font-semibold">
+          {list.highlightedBy === 'Recommended' ? t(`Recommended wallets`) : null}
           {list.highlightedBy === 'PreviouslyConnected' ? t(`Recently used`) : null}
           {list.highlightedBy === 'Installed' ? t(`Installed wallets`) : null}
           {list.highlightedBy === 'TopWallet' ? t(`Popular wallets`) : null}
@@ -205,19 +242,21 @@ const ListOfWallets: React.FC<{
             </Collapse>
           </>
         ) : null}
-        <div tw="text-xs font-semibold mt-4 -mb-2 text-white/80 underline cursor-pointer">
-          <button type="button" onClick={() => setShowOnboarding(true)}>
-            <span>{t(`I don't have a wallet`)}</span>
-          </button>
-        </div>
+        <div css={[tw`text-xs font-semibold mt-4 -mb-2 underline cursor-pointer`, styles.buttonText[theme]]}>
+        <button type="button" onClick={() => setShowOnboarding(true)}>
+          <span>{t(`I don't have a wallet`)}</span>
+        </button>
       </div>
+    </div >
 
-      {/* Bottom Shades */}
-      {isOpen && list.others.length > 6 ? (
-        <>
-          <div css={[tw`block w-full h-20 absolute left-0 bottom-7 z-50`, styles.shades[theme]]} />
-        </>
-      ) : null}
+      {/* Bottom Shades */ }
+  {
+    isOpen && list.others.length > 6 ? (
+      <>
+        <div css={[tw`block w-full h-20 absolute left-0 bottom-7 z-50`, styles.shades[theme]]} />
+      </>
+    ) : null
+  }
     </>
   );
 };
@@ -236,11 +275,12 @@ export interface WalletModalProps {
   container?: string;
 }
 
-type HIGHLIGHTED_BY = 'PreviouslyConnected' | 'Installed' | 'TopWallet' | 'Onboarding';
+type HIGHLIGHTED_BY = 'PreviouslyConnected' | 'Installed' | 'TopWallet' | 'Onboarding' | 'Recommended';
+const RECOMMENDED_WALLETS: WalletName[] = ['Backpack' as WalletName<'Backpack'>];
+
 const TOP_WALLETS: WalletName[] = [
   'Phantom' as WalletName<'Phantom'>,
   'Solflare' as WalletName<'Solflare'>,
-  'Backpack' as WalletName<'Backpack'>,
 ];
 
 interface IUnifiedWalletModal {
@@ -272,7 +312,7 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
   const [isOpen, onToggle] = useToggle(false);
   const previouslyConnected = usePreviouslyConnected();
 
-  const list: { highlightedBy: HIGHLIGHTED_BY; highlight: Adapter[]; others: Adapter[] } = useMemo(() => {
+  const list: { recommendedWallets: Adapter[]; highlightedBy: HIGHLIGHTED_BY; highlight: Adapter[]; others: Adapter[] } = useMemo(() => {
     // Then, Installed, Top 3, Loadable, NotDetected
     const filteredAdapters = wallets.reduce<{
       previouslyConnected: Adapter[];
@@ -280,9 +320,15 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
       top3: Adapter[];
       loadable: Adapter[];
       notDetected: Adapter[];
+      recommendedWallets: Adapter[];
     }>(
       (acc, wallet) => {
         const adapterName = wallet.adapter.name;
+
+        if (RECOMMENDED_WALLETS.some((wallet) => wallet === adapterName)) {
+          acc.recommendedWallets.push(wallet.adapter);
+          return acc;
+        }
 
         // Previously connected takes highest
         const previouslyConnectedIndex = previouslyConnected.indexOf(adapterName);
@@ -314,6 +360,7 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
         return acc;
       },
       {
+        recommendedWallets: [],
         previouslyConnected: [],
         installed: [],
         top3: [],
@@ -323,7 +370,7 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
     );
 
     if (filteredAdapters.previouslyConnected.length > 0) {
-      const { previouslyConnected, ...rest } = filteredAdapters;
+      const { recommendedWallets, previouslyConnected, ...rest } = filteredAdapters;
 
       const highlight = filteredAdapters.previouslyConnected.slice(0, 3);
       let others = Object.values(rest)
@@ -334,6 +381,7 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
       others = others.filter(Boolean);
 
       return {
+        recommendedWallets,
         highlightedBy: 'PreviouslyConnected',
         highlight,
         others,
@@ -341,7 +389,7 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
     }
 
     if (filteredAdapters.installed.length > 0) {
-      const { installed, ...rest } = filteredAdapters;
+      const { recommendedWallets, installed, ...rest } = filteredAdapters;
       const highlight = filteredAdapters.installed.slice(0, 3);
       const others = Object.values(rest)
         .flat()
@@ -349,19 +397,19 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
         .sort(sortByPrecedence(walletPrecedence || []));
       others.unshift(...filteredAdapters.installed.slice(3, filteredAdapters.installed.length));
 
-      return { highlightedBy: 'Installed', highlight, others };
+      return { recommendedWallets, highlightedBy: 'Installed', highlight, others };
     }
 
     if (filteredAdapters.loadable.length === 0) {
-      return { highlightedBy: 'Onboarding', highlight: [], others: [] };
+      return { recommendedWallets: filteredAdapters.recommendedWallets, highlightedBy: 'Onboarding', highlight: [], others: [] };
     }
 
-    const { top3, ...rest } = filteredAdapters;
+    const { recommendedWallets, top3, ...rest } = filteredAdapters;
     const others = Object.values(rest)
       .flat()
       .sort((a, b) => PRIORITISE[a.readyState] - PRIORITISE[b.readyState])
       .sort(sortByPrecedence(walletPrecedence || []));
-    return { highlightedBy: 'TopWallet', highlight: top3, others };
+    return { recommendedWallets, highlightedBy: 'TopWallet', highlight: top3, others };
   }, [wallets, previouslyConnected]);
 
   const contentRef = useRef<HTMLDivElement>(null);
