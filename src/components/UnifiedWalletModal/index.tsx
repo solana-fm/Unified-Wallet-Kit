@@ -45,7 +45,7 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     jupiter: [],
   },
   buttonText: {
-    light: [tw`text-black/80`],
+    light: [tw`text-gray-800`],
     dark: [tw`text-white/80`],
     jupiter: [tw`text-white/80`]
   }
