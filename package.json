@@ -1,5 +1,5 @@
 {
-  "name": "@solana-fm/wallet-adapter",
+  "name": "@solanafm/wallet-adapter",
   "version": "0.1.5",
   "license": "MIT",
   "main": "dist/components.esm.js",
