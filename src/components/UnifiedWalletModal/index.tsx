@@ -44,6 +44,11 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     dark: [],
     jupiter: [],
   },
+  buttonText: {
+    light: [tw`text-black/80`],
+    dark: [tw`text-white/80`],
+    jupiter: [tw`text-white/80`]
+  }
 };
 
 const Header: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -237,19 +242,21 @@ const ListOfWallets: React.FC<{
             </Collapse>
           </>
         ) : null}
-        <div tw="text-xs font-semibold mt-4 -mb-2 text-white/80 underline cursor-pointer">
-          <button type="button" onClick={() => setShowOnboarding(true)}>
-            <span>{t(`I don't have a wallet`)}</span>
-          </button>
-        </div>
+        <div css={[tw`text-xs font-semibold mt-4 -mb-2 underline cursor-pointer`, styles.buttonText[theme]]}>
+        <button type="button" onClick={() => setShowOnboarding(true)}>
+          <span>{t(`I don't have a wallet`)}</span>
+        </button>
       </div>
+    </div >
 
-      {/* Bottom Shades */}
-      {isOpen && list.others.length > 6 ? (
-        <>
-          <div css={[tw`block w-full h-20 absolute left-0 bottom-7 z-50`, styles.shades[theme]]} />
-        </>
-      ) : null}
+      {/* Bottom Shades */ }
+  {
+    isOpen && list.others.length > 6 ? (
+      <>
+        <div css={[tw`block w-full h-20 absolute left-0 bottom-7 z-50`, styles.shades[theme]]} />
+      </>
+    ) : null
+  }
     </>
   );
 };
