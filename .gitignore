@@ -1,6 +1,6 @@
 /node_modules
 .vscode
 .yarn
-dist/
+# dist/
 .next/
 .DS_Store

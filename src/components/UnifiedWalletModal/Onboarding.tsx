@@ -26,6 +26,11 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     dark: [tw`text-white/30`],
     jupiter: [tw`text-white/30`],
   },
+  pillBadge: {
+    light: [tw`bg-green-300`],
+    dark: [tw`bg-green-600`],
+    jupiter: [tw`bg-green-600`],
+  }
 };
 
 export const OnboardingIntro: React.FC<{
@@ -44,7 +49,7 @@ export const OnboardingIntro: React.FC<{
       <div tw="mt-4 flex flex-col justify-center items-center text-center">
         <span tw="text-lg font-semibold">{t(`New here?`)}</span>
         <span tw="mt-3 text-sm " css={[styles.subtitle[theme]]}>
-          {t(`Welcome to DeFi! Create a crypto wallet to get started!`)}
+          {t(`Welcome to SolanaFM! Create a crypto wallet to get started!`)}
         </span>
       </div>
 
@@ -97,6 +102,7 @@ export const OnboardingGetWallets: React.FC<{ flow: IOnboardingFlow; setFlow: (f
             >
               <img src={item.icon} width={20} height={20} alt={item.name} />
               <span>{item.name}</span>
+              {idx === 0 && <div css={[tw`rounded-full px-2 text-xs`, styles.pillBadge[theme]]}>Recommended</div>}
             </a>
           );
         })}
