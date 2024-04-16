@@ -280,7 +280,7 @@ const RECOMMENDED_WALLETS: WalletName[] = ['Solflare' as WalletName<'Solflare'>]
 
 const TOP_WALLETS: WalletName[] = [
   'Phantom' as WalletName<'Phantom'>,
-  'Solflare' as WalletName<'Solflare'>,
+  'Backpack' as WalletName<'Backpack'>,
 ];
 
 interface IUnifiedWalletModal {
@@ -324,8 +324,8 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
     }>(
       (acc, wallet) => {
         const adapterName = wallet.adapter.name;
-
-        if (RECOMMENDED_WALLETS.some((wallet) => wallet === adapterName)) {
+        
+        if (RECOMMENDED_WALLETS.some((wallet) => wallet === adapterName) && acc.recommendedWallets.length < 1) {
           acc.recommendedWallets.push(wallet.adapter);
           return acc;
         }
