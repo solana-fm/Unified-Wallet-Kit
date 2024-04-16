@@ -276,7 +276,7 @@ export interface WalletModalProps {
 }
 
 type HIGHLIGHTED_BY = 'PreviouslyConnected' | 'Installed' | 'TopWallet' | 'Onboarding' | 'Recommended';
-const RECOMMENDED_WALLETS: WalletName[] = ['Backpack' as WalletName<'Backpack'>];
+const RECOMMENDED_WALLETS: WalletName[] = ['Solflare' as WalletName<'Solflare'>];
 
 const TOP_WALLETS: WalletName[] = [
   'Phantom' as WalletName<'Phantom'>,
