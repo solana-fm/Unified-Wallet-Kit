@@ -47,8 +47,8 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
   buttonText: {
     light: [tw`text-gray-800`],
     dark: [tw`text-white/80`],
-    jupiter: [tw`text-white/80`]
-  }
+    jupiter: [tw`text-white/80`],
+  },
 };
 
 const Header: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -243,20 +243,18 @@ const ListOfWallets: React.FC<{
           </>
         ) : null}
         <div css={[tw`text-xs font-semibold mt-4 -mb-2 underline cursor-pointer`, styles.buttonText[theme]]}>
-        <button type="button" onClick={() => setShowOnboarding(true)}>
-          <span>{t(`I don't have a wallet`)}</span>
-        </button>
+          <button type="button" onClick={() => setShowOnboarding(true)}>
+            <span>{t(`I don't have a wallet`)}</span>
+          </button>
+        </div>
       </div>
-    </div >
 
-      {/* Bottom Shades */ }
-  {
-    isOpen && list.others.length > 6 ? (
-      <>
-        <div css={[tw`block w-full h-20 absolute left-0 bottom-7 z-50`, styles.shades[theme]]} />
-      </>
-    ) : null
-  }
+      {/* Bottom Shades */}
+      {isOpen && list.others.length > 6 ? (
+        <>
+          <div css={[tw`block w-full h-20 absolute left-0 bottom-7 z-50`, styles.shades[theme]]} />
+        </>
+      ) : null}
     </>
   );
 };
@@ -279,8 +277,9 @@ type HIGHLIGHTED_BY = 'PreviouslyConnected' | 'Installed' | 'TopWallet' | 'Onboa
 const RECOMMENDED_WALLETS: WalletName[] = ['Solflare' as WalletName<'Solflare'>];
 
 const TOP_WALLETS: WalletName[] = [
-  'Phantom' as WalletName<'Phantom'>,
   'Backpack' as WalletName<'Backpack'>,
+  'Coinbase Wallet' as WalletName<'Coinbase Wallet'>,
+  'Phantom' as WalletName<'Phantom'>,
 ];
 
 interface IUnifiedWalletModal {
@@ -312,7 +311,12 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
   const [isOpen, onToggle] = useToggle(false);
   const previouslyConnected = usePreviouslyConnected();
 
-  const list: { recommendedWallets: Adapter[]; highlightedBy: HIGHLIGHTED_BY; highlight: Adapter[]; others: Adapter[] } = useMemo(() => {
+  const list: {
+    recommendedWallets: Adapter[];
+    highlightedBy: HIGHLIGHTED_BY;
+    highlight: Adapter[];
+    others: Adapter[];
+  } = useMemo(() => {
     // Then, Installed, Top 3, Loadable, NotDetected
     const filteredAdapters = wallets.reduce<{
       previouslyConnected: Adapter[];
@@ -324,8 +328,10 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
     }>(
       (acc, wallet) => {
         const adapterName = wallet.adapter.name;
-        
+
         if (RECOMMENDED_WALLETS.some((wallet) => wallet === adapterName) && acc.recommendedWallets.length < 1) {
+          // Prevent duplicates since Coinbase Wallet has two adapters duplicate
+          if (acc.recommendedWallets.some((wallet) => wallet.name === adapterName)) return acc;
           acc.recommendedWallets.push(wallet.adapter);
           return acc;
         }
@@ -390,18 +396,41 @@ const UnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
 
     if (filteredAdapters.installed.length > 0) {
       const { recommendedWallets, installed, ...rest } = filteredAdapters;
-      const highlight = filteredAdapters.installed.slice(0, 3);
+
+      console.log(recommendedWallets);
+      // Sort the installed wallets according to the top wallets that we want to show to the user first
+      const highlight: Adapter[] = [];
+
+      // Loop through the installed wallet adapters and check if they are in the top wallets list
+      // If they are in the top wallet list, we will add it to the filtered recommende wallets
+      TOP_WALLETS.forEach((topWallet) => {
+        filteredAdapters.installed.forEach((installedWallet, index) => {
+          if (topWallet === installedWallet.name) {
+            const walletToPush = filteredAdapters.installed.splice(index, 1)[0];
+            highlight.push(walletToPush);
+          }
+        });
+      });
+
+      // highlight.push(...filteredAdapters.installed.slice(0, 1));
+      console.log(highlight);
+      console.log(filteredAdapters.installed);
       const others = Object.values(rest)
         .flat()
         .sort((a, b) => PRIORITISE[a.readyState] - PRIORITISE[b.readyState])
         .sort(sortByPrecedence(walletPrecedence || []));
-      others.unshift(...filteredAdapters.installed.slice(3, filteredAdapters.installed.length));
+      others.unshift(...filteredAdapters.installed.slice(0, filteredAdapters.installed.length));
 
       return { recommendedWallets, highlightedBy: 'Installed', highlight, others };
     }
 
     if (filteredAdapters.loadable.length === 0) {
-      return { recommendedWallets: filteredAdapters.recommendedWallets, highlightedBy: 'Onboarding', highlight: [], others: [] };
+      return {
+        recommendedWallets: filteredAdapters.recommendedWallets,
+        highlightedBy: 'Onboarding',
+        highlight: [],
+        others: [],
+      };
     }
 
     const { recommendedWallets, top3, ...rest } = filteredAdapters;
