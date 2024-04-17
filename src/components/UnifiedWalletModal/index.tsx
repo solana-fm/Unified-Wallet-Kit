@@ -277,8 +277,8 @@ type HIGHLIGHTED_BY = 'PreviouslyConnected' | 'Installed' | 'TopWallet' | 'Onboa
 const RECOMMENDED_WALLETS: WalletName[] = ['Solflare' as WalletName<'Solflare'>];
 
 const TOP_WALLETS: WalletName[] = [
-  'Backpack' as WalletName<'Backpack'>,
   'Coinbase Wallet' as WalletName<'Coinbase Wallet'>,
+  'Backpack' as WalletName<'Backpack'>,
   'Phantom' as WalletName<'Phantom'>,
 ];
 
