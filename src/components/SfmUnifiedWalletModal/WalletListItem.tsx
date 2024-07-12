@@ -22,8 +22,8 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     jupiter: [tw`hover:shadow-2xl hover:bg-white/10`],
   },
   walletItem: {
-    light: [tw`bg-gray-50 hover:shadow-lg hover:border-black/10`],
-    dark: [tw`bg-dark-700 hover:shadow-2xl hover:bg-white/10`],
+    light: [tw`bg-gray-50 hover:shadow-lg`],
+    dark: [tw`bg-dark-700 hover:shadow-2xl`],
     jupiter: [tw`hover:shadow-2xl hover:bg-white/10`],
   },
 };
