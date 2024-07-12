@@ -25,8 +25,8 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     jupiter: [tw`bg-gradient-to-t from-[rgb(49, 62, 76)] to-transparent pointer-events-none`],
   },
   walletItem: {
-    light: [tw`bg-gray-50 hover:shadow-lg hover:border-black/10`],
-    dark: [tw`bg-dark-700 hover:shadow-2xl hover:bg-white/10`],
+    light: [tw`bg-gray-50 hover:shadow-lg`],
+    dark: [tw`bg-dark-700 hover:shadow-2xl`],
     jupiter: [tw`hover:shadow-2xl hover:bg-white/10`],
   },
   subtitle: {
@@ -164,7 +164,7 @@ const ListOfWallets: React.FC<{
                   tw`p-[1px] border border-white/10 rounded-lg flex items-center lg:justify-center cursor-pointer flex-1 w-full`,
                   tw`hover:backdrop-blur-xl transition-all`,
                   tw`hover:bg-gradient-to-r from-[#8057FF] to-[#D84E76]`,
-                  styles.walletItem[theme],
+                  // styles.walletItem[theme],
                 ]}
               >
                 <div
