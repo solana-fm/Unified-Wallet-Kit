@@ -10,6 +10,7 @@ import { usePrevious } from 'react-use';
 import { shortenAddress } from '../misc/utils';
 import ModalDialog from '../components/ModalDialog';
 import UnifiedWalletModal from '../components/UnifiedWalletModal';
+import SfmUnifiedWalletModal from '../components/SfmUnifiedWalletModal';
 import {
   UnifiedWalletValueContext,
   UNIFIED_WALLET_VALUE_DEFAULT_CONTEXT,
@@ -165,7 +166,8 @@ const UnifiedWalletContextProvider: React.FC<
       }}
     >
       <ModalDialog open={showModal} onClose={() => setShowModal(false)}>
-        <UnifiedWalletModal onClose={() => setShowModal(false)} />
+        {/* <UnifiedWalletModal onClose={() => setShowModal(false)} /> */}
+        <SfmUnifiedWalletModal onClose={() => setShowModal(false)} />
       </ModalDialog>
 
       {children}
