@@ -186,7 +186,7 @@ const ListOfWallets: React.FC<{
             );
           })}
         </div>
-        <div tw="mt-2 flex flex-col lg:flex-row lg:space-x-2 space-y-2 lg:space-y-0">
+        <div tw="mt-2 flex flex-col space-y-2 ">
           {list.highlight.map((adapter, idx) => {
             const adapterName = (() => {
               if (adapter.name === SolanaMobileWalletAdapterWalletName) return t(`Mobile`);
@@ -457,7 +457,7 @@ const SfmUnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
     <div
       ref={contentRef}
       css={[
-        tw`max-w-md w-full relative flex flex-col overflow-hidden rounded-xl max-h-[90vh] lg:max-h-[576px] transition-height duration-500 ease-in-out `,
+        tw`max-w-md w-full relative flex flex-col overflow-hidden rounded-xl transition-height duration-500 ease-in-out`,
         styles.container[theme],
       ]}
     >
