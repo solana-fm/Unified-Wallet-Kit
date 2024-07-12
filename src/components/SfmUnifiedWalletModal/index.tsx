@@ -12,6 +12,7 @@ import CloseIcon from '../../icons/CloseIcon';
 import { isMobile, useOutsideClick } from '../../misc/utils';
 import NotInstalled from '../UnifiedWalletModal/NotInstalled';
 import { OnboardingFlow } from '../UnifiedWalletModal/Onboarding';
+import { SfmLogo } from './SfmLogo';
 
 const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
   container: {
@@ -53,7 +54,7 @@ const Header: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   return (
     <div css={[tw`px-5 py-6 flex flex-row justify-center `, styles.header[theme]]}>
       <div tw="flex flex-col items-center">
-        <img src="/fmSOLLogo.png" alt="logo" />
+        <img src={SfmLogo} alt="logo" />
         <div tw="font-semibold text-xl -mt-10">
           <span css={[tw`text-transparent bg-clip-text bg-gradient-to-r from-[#8057FF] to-[#D84E76]`]}>
             {t(`Connect Wallet`)}
