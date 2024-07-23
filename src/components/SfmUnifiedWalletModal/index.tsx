@@ -45,6 +45,11 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     dark: [tw`text-white/80`],
     jupiter: [tw`text-white/80`],
   },
+  badge: {
+    light: [tw`inline-flex items-center rounded-md bg-[#E5E5E8] px-2 py-1 text-xs font-medium text-[#949497]`],
+    dark: [tw`inline-flex items-center rounded-md bg-[#171C2D] px-2 py-1 text-xs font-medium text-[#5E5F64] `],
+    jupiter: [tw`inline-flex items-center rounded-md bg-[#171C2D] px-2 py-1 text-xs font-medium text-gray-600`],
+  },
 };
 
 const Header: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -163,8 +168,7 @@ const ListOfWallets: React.FC<{
                 key={idx}
                 onClick={(event) => onClickWallet(event, adapter)}
                 css={[
-                  tw`p-[1px] border border-[#242423] rounded-lg flex items-center lg:justify-center cursor-pointer flex-1 w-full`,
-                  tw`hover:backdrop-blur-xl transition-all`,
+                  tw`p-[1px] border border-white/10 rounded-lg flex items-center lg:justify-center cursor-pointer flex-1 w-full`,
                   tw`hover:bg-gradient-to-r from-[#8057FF] to-[#D84E76]`,
                 ]}
               >
@@ -182,6 +186,7 @@ const ListOfWallets: React.FC<{
                   <span tw="font-semibold text-lg ml-4 lg:ml-2">{adapterName}</span>
                   {attachment ? <div>{attachment}</div> : null}
                 </div>
+                <span css={[tw`absolute right-10`, styles.badge[theme]]}>Recommended</span>
               </div>
             );
           })}
