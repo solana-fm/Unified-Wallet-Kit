@@ -149,7 +149,8 @@ const ListOfWallets: React.FC<{
   return (
     <>
       <div className="hideScrollbar" css={[tw`h-full overflow-y-auto pt-3 pb-8 px-5 relative`, isOpen && tw`mb-7`]}>
-        <div tw="flex flex-col lg:flex-row lg:space-x-2 space-y-2 lg:space-y-0">
+        <div tw="flex flex-col space-y-2">
+          <span tw="text-sm font-semibold text-gray-500">{t(`Recommended`)}</span>
           {list.recommendedWallets.map((adapter, idx) => {
             const attachment = walletAttachments ? walletAttachments[adapter.name]?.attachment : null;
             const adapterName = (() => {
@@ -162,7 +163,7 @@ const ListOfWallets: React.FC<{
                 key={idx}
                 onClick={(event) => onClickWallet(event, adapter)}
                 css={[
-                  tw`p-[1px] border border-white/10 rounded-lg flex items-center lg:justify-center cursor-pointer flex-1 w-full`,
+                  tw`p-[1px] border border-[#242423] rounded-lg flex items-center lg:justify-center cursor-pointer flex-1 w-full`,
                   tw`hover:backdrop-blur-xl transition-all`,
                   tw`hover:bg-gradient-to-r from-[#8057FF] to-[#D84E76]`,
                 ]}
