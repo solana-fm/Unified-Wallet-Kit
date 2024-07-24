@@ -21,8 +21,8 @@ const styles: Record<string, { [key in IUnifiedTheme]: TwStyle[] }> = {
     jupiter: [tw`text-white bg-[rgb(49, 62, 76)]`],
   },
   shades: {
-    light: [tw`bg-gradient-to-t from-[#ffffff] to-transparent pointer-events-none`],
-    dark: [tw`bg-gradient-to-t from-[#3A3B43] to-transparent pointer-events-none`],
+    light: [tw`bg-gradient-to-t from-[#EEF0F5] to-transparent pointer-events-none`],
+    dark: [tw`bg-gradient-to-t from-[#151820] to-transparent pointer-events-none`],
     jupiter: [tw`bg-gradient-to-t from-[rgb(49, 62, 76)] to-transparent pointer-events-none`],
   },
   walletItem: {
@@ -462,7 +462,7 @@ const SfmUnifiedWalletModal: React.FC<IUnifiedWalletModal> = ({ onClose }) => {
     <div
       ref={contentRef}
       css={[
-        tw`max-w-md w-full relative flex flex-col overflow-hidden rounded-xl max-h-[90vh] lg:max-h-[576px] transition-height duration-500 ease-in-out`,
+        tw`max-w-md w-full relative flex flex-col overflow-hidden rounded-xl max-h-[90vh] lg:max-h-[600px] transition-height duration-500 ease-in-out`,
         styles.container[theme],
       ]}
     >
