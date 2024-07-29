@@ -221,6 +221,9 @@ module.exports = {
           },
         },
       },
+      zIndex: {
+        100: '100',
+      },
       animation: {
         'fade-in': 'fade-in 0.15s ease-in-out',
         'fade-out': 'fade-out 0.15s ease-out',
